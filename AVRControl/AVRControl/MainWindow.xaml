@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:AVRControl"
         mc:Ignorable="d"
         Title="AVR Control" Height="350" Width="525">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -15,7 +18,7 @@
             <RowDefinition Height="22px"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Button Grid.Column="1" Grid.Row="0" x:Name="buttonConnectDisconnect" Content="Connect" VerticalAlignment="Top" Width="75" HorizontalAlignment="Left"/>
+        <Button Grid.Column="1" Grid.Row="0" x:Name="buttonConnectDisconnect" Content="Scan" VerticalAlignment="Top" Width="75" HorizontalAlignment="Left" Command="{Binding ScanAction}"/>
         <ComboBox Grid.Column="0" Grid.Row="0" x:Name="comboBoxDeviceSelect" HorizontalAlignment="Right" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>

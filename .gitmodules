@@ -1,0 +1,3 @@
+[submodule "upnp"]
+	path = upnp
+	url = https://github.com/mono/mono-upnp.git
