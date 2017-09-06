@@ -102,6 +102,10 @@
       <Project>{4CC61E5D-7BD5-4655-9AEB-604AFBF6EA75}</Project>
       <Name>AVRLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FalichsLib\FalichsLib.csproj">
+      <Project>{F97D88F1-DDB1-4DC5-BDFF-C0D56EEBCE56}</Project>
+      <Name>FalichsLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

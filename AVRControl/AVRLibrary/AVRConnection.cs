@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using FalichsLib;
@@ -13,6 +15,8 @@ using Mono.Ssdp;
 namespace AVRLibrary
 {
 
+
+    public delegate void DeviceAddedDelegate(object sender, AVRDevice avrDevice);
 
     public class AVRConnection : IDisposable
     {
@@ -30,22 +34,31 @@ namespace AVRLibrary
         protected bool _disposed = false;
         private readonly object mutex_AVRservice = new object();
 
-        private Dictionary<string, AVRService> _avrServices = null;
-        private HttpClient _httpClient = null;
-        private Client _ssdpClient = null;
+        private Dictionary<string, AVRDevice> _avrServices = null;
+
+        public Dictionary<string, AVRDevice> AVRDevices { get { return _avrServices; } }
+
+        private static HttpClient _httpClient = new HttpClient();
+        private static Client _ssdpClient = new Client();
 
 
-        public Dictionary<string, AVRService> AvrServices { get; set; }
+        public event DeviceAddedDelegate AVRDevicAdded;
 
 
         public AVRConnection()
         {
-            _httpClient = new HttpClient();
-            _ssdpClient = new Client();
-            //_ssdpClient.Browse("urn:schemas-upnp-org:device:MediaRenderer:1", false);
-            _ssdpClient.BrowseAll(false);
-            _avrServices = new Dictionary<string, AVRService>();
+            _ssdpClient.Browse("urn:schemas-upnp-org:device:MediaRenderer:1", false);
+            _avrServices = new Dictionary<string, AVRDevice>();
+            TimerCallback tc = Tc;
+            Timer scanTimer = new Timer(tc);
             initializeEventHandlers();
+        }
+
+
+        private void Tc(object state)
+        {
+            _ssdpClient.Start(true);
+            Task.Delay(1000).ContinueWith(x => { StopScanning(); });
         }
 
 
@@ -54,6 +67,15 @@ namespace AVRLibrary
             _ssdpClient.ServiceAdded += SsdpClientOnServiceAdded;
             _ssdpClient.ServiceUpdated += SsdpClientOnServiceUpdated;
             _ssdpClient.ServiceRemoved += SsdpClientOnServiceRemoved;
+        }
+
+
+        protected virtual void OnAVRServiceAdded(AVRDevice e)
+        {
+            if (AVRDevicAdded != null && e != null)
+            {
+                AVRDevicAdded(this, e);
+            }
         }
 
 
@@ -88,7 +110,7 @@ namespace AVRLibrary
             {
                 return;
             }
-            FalichsLogger.Instance.log(FalichsLogger.Severity.INFO, "SSdp Service added:" + serviceArgs.Service.Locations.First() + "," + serviceArgs.Service.ServiceType);
+            FalichsLogger.Instance.log(FalichsLogger.Severity.INFO, "SSdp Service found:" + serviceArgs.Service.Locations.First() + "," + serviceArgs.Service.ServiceType);
             lock (mutex_AVRservice)
             {
                 if (_avrServices.ContainsKey(serviceArgs.Service.Usn))
@@ -96,33 +118,37 @@ namespace AVRLibrary
                     return;
                 }
             }
-            CheckSsdpService(serviceArgs.Service.Usn, serviceArgs.Service.GetLocation(0));
+            GetDeviceDescribtionAsync(serviceArgs.Service.Usn, serviceArgs.Service.GetLocation(0));
         }
 
 
-        private async void CheckSsdpService(string usn, string location)
+        private async void GetDeviceDescribtionAsync(string usn, string location)
         {
             var httpResponseMessage = await _httpClient.GetAsync(location.Trim());
             // check the response
-            if (httpResponseMessage.StatusCode == HttpStatusCode.OK)
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
-                var response = await httpResponseMessage.Content.ReadAsStreamAsync();
-                XDocument rxDocument = XDocument.Load(response);
-                var describtion = AVRDeviceDescribtion.ReadFromXDocument(rxDocument);
-                if (describtion == null)
+                return;
+            }
+            var response = await httpResponseMessage.Content.ReadAsStreamAsync();
+            XDocument rxDocument = XDocument.Load(response);
+            var describtion = AVRDeviceDescribtion.ReadFromXDocument(rxDocument);
+            if (describtion == null)
+            {
+                return;
+            }
+            AVRDevice avrDevice = null;
+            lock (mutex_AVRservice)
+            {
+                if (_avrServices.ContainsKey(usn))
                 {
                     return;
                 }
-                FalichsLogger.Instance.log(FalichsLogger.Severity.INFO, "adding AVR: " + describtion.FriendlyName);
-                lock (mutex_AVRservice)
-                {
-                    if (_avrServices.ContainsKey(usn))
-                    {
-                        return;
-                    }
-                    _avrServices.Add(usn, new AVRService(usn, describtion));
-                }
+                avrDevice = new AVRDevice(usn, describtion);
+                _avrServices.Add(usn, avrDevice);
+                
             }
+            OnAVRServiceAdded(avrDevice);
         }
 
 
@@ -130,11 +156,11 @@ namespace AVRLibrary
         {
             FalichsLogger.Instance.log(FalichsLogger.Severity.INFO, "Scanning for AVR Devices ...");
             _ssdpClient.Start(true);
-            Task.Delay(4000).ContinueWith( x => { StopScanning(); });
+            Task.Delay(4000).ContinueWith(x => { StopScanning(); });
         }
 
 
-        public void StopScanning()
+        private void StopScanning()
         {
             FalichsLogger.Instance.log(FalichsLogger.Severity.INFO, "Stop scanning for AVR Devices ...");
             _ssdpClient.Stop(true);
@@ -157,7 +183,10 @@ namespace AVRLibrary
             if (disposing)
             {
                 _httpClient?.Dispose();
+                _httpClient = null;
                 _ssdpClient?.Dispose();
+                _ssdpClient = null;
+                AVRDevicAdded = null;
                 _disposed = true;
             }
         }

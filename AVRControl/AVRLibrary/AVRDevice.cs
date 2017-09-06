@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace AVRLibrary
 {
-    public class AVRService
+    public class AVRDevice
     {
         
 
-        private string _usn = "";
+        private readonly string _usn = null;
 
 
         public string Usn { get { return _usn;} }
 
 
-        private AVRDeviceDescribtion _avrDeviceDescribtion;
+        private readonly AVRDeviceDescribtion _avrDeviceDescribtion;
 
         public AVRDeviceDescribtion AvrDeviceDescribtion
         {
@@ -33,7 +33,7 @@ namespace AVRLibrary
         }
 
 
-        public AVRService(string usn, AVRDeviceDescribtion deviceDescribtion)
+        public AVRDevice(string usn, AVRDeviceDescribtion deviceDescribtion)
         {
             _usn = usn;
             _avrDeviceDescribtion = deviceDescribtion;

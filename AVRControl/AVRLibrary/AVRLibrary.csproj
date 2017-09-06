@@ -43,7 +43,7 @@
     <Compile Include="AVRConnection.cs" />
     <Compile Include="AVRDeviceData.cs" />
     <Compile Include="AVRDeviceDescribtion.cs" />
-    <Compile Include="AVRService.cs" />
+    <Compile Include="AVRDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

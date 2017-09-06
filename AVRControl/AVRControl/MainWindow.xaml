@@ -9,6 +9,15 @@
     <Window.DataContext>
         <local:MainViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate x:Key="AVRDeviceDescribtionTemplate">
+            <StackPanel>
+                <TextBlock Text="{Binding Path=FriendlyName}" />
+                <TextBlock Text="{Binding Path=SerialNumber}"/>
+                <TextBlock Text="{Binding Path=ModelUrl}"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -19,6 +28,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Button Grid.Column="1" Grid.Row="0" x:Name="buttonConnectDisconnect" Content="Scan" VerticalAlignment="Top" Width="75" HorizontalAlignment="Left" Command="{Binding ScanAction}"/>
-        <ComboBox Grid.Column="0" Grid.Row="0" x:Name="comboBoxDeviceSelect" HorizontalAlignment="Right" VerticalAlignment="Top" Width="120"/>
+        <ComboBox Grid.Column="0" Grid.Row="0" x:Name="comboBoxDeviceSelect" VerticalAlignment="Top" ItemsSource="{Binding DeviceDescribtions}" ItemTemplate="{StaticResource AVRDeviceDescribtionTemplate}" SelectedItem="{Binding SelectedDevice}"/>
     </Grid>
 </Window>
