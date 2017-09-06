@@ -12,9 +12,9 @@
     <Window.Resources>
         <DataTemplate x:Key="AVRDeviceDescribtionTemplate">
             <StackPanel>
-                <TextBlock Text="{Binding Path=FriendlyName}" />
-                <TextBlock Text="{Binding Path=SerialNumber}"/>
-                <TextBlock Text="{Binding Path=ModelUrl}"/>
+                <TextBlock Text="{Binding Path=AvrDeviceDescribtion.FriendlyName}" />
+                <TextBlock Text="{Binding Path=AvrDeviceDescribtion.SerialNumber}"/>
+                <TextBlock Text="{Binding Path=AvrDeviceDescribtion.ModelUrl}"/>
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
@@ -28,6 +28,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Button Grid.Column="1" Grid.Row="0" x:Name="buttonConnectDisconnect" Content="Scan" VerticalAlignment="Top" Width="75" HorizontalAlignment="Left" Command="{Binding ScanAction}"/>
-        <ComboBox Grid.Column="0" Grid.Row="0" x:Name="comboBoxDeviceSelect" VerticalAlignment="Top" ItemsSource="{Binding DeviceDescribtions}" ItemTemplate="{StaticResource AVRDeviceDescribtionTemplate}" SelectedItem="{Binding SelectedDevice}"/>
+        <ComboBox Grid.Column="0" Grid.Row="0" x:Name="comboBoxDeviceSelect" VerticalAlignment="Top" ItemsSource="{Binding Devices}" ItemTemplate="{StaticResource AVRDeviceDescribtionTemplate}" SelectedItem="{Binding SelectedDevice}"/>
     </Grid>
 </Window>

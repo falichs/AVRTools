@@ -20,26 +20,25 @@ namespace AVRControl
 
         private AVRConnection _connection = null;
 
-        private ObservableCollection<AVRDeviceDescribtion> _deviceDescribtions;
+        private ObservableCollection<AVRDevice> _devices;
         
-        public ObservableCollection<AVRDeviceDescribtion> DeviceDescribtions
+        public ObservableCollection<AVRDevice> Devices
         {
-            get { return _deviceDescribtions; }
-            set { _deviceDescribtions = value; }
+            get { return _devices; }
+            set { _devices = value; }
         }
 
-        private AVRDeviceDescribtion _selectedDevice;
+        private AVRDevice _selectedDevice;
 
 
-        public AVRDeviceDescribtion SelectedDevice
+        public AVRDevice SelectedDevice
         {
             get { return _selectedDevice; }
             set {
                 if (_selectedDevice != value)
                 {
                     _selectedDevice = value;
-                    FalichsLogger.Instance.log(FalichsLogger.Severity.DEBUG, "selected device: " + _selectedDevice.FriendlyName);
-                    // connect _connection.
+                    _connection.CennectToDevice(_selectedDevice);
                 } }
         }
 
@@ -55,7 +54,7 @@ namespace AVRControl
         {
             _connection = new AVRConnection();
             _connection.AVRDevicAdded += ConnectionOnAvrServiceAddedEvent;
-            _deviceDescribtions = new ObservableCollection<AVRDeviceDescribtion>();
+            _devices = new ObservableCollection<AVRDevice>();
             _scanAction = new RelayCommand(x => { _connection.StartScanning(); });
         }
 
@@ -64,10 +63,10 @@ namespace AVRControl
         {
             lock (_mutex)
             {
-                Application.Current.Dispatcher.Invoke(() => { _deviceDescribtions.Clear(); });
+                Application.Current.Dispatcher.Invoke(() => { _devices.Clear(); });
                 foreach (var dev in _connection.AVRDevices)
                 {
-                    Application.Current.Dispatcher.Invoke( () => { _deviceDescribtions.Add(new AVRDeviceDescribtion(dev.Value.AvrDeviceDescribtion)); });
+                    Application.Current.Dispatcher.Invoke( () => { _devices.Add(avrDevice); });
 
                 }
             }

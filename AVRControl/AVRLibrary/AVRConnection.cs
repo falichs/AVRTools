@@ -38,6 +38,8 @@ namespace AVRLibrary
 
         public Dictionary<string, AVRDevice> AVRDevices { get { return _avrServices; } }
 
+        private AVRDevice _connectedAvrDevice = null;
+
         private static HttpClient _httpClient = new HttpClient();
         private static Client _ssdpClient = new Client();
 
@@ -88,7 +90,7 @@ namespace AVRLibrary
             FalichsLogger.Instance.log(FalichsLogger.Severity.INFO, "SSDP Service removed:" + serviceArgs.Service.Locations.First());
             lock (mutex_AVRservice)
             {
-                if (!_avrServices.ContainsKey(serviceArgs.Usn))
+                if (!_avrServices.ContainsKey(serviceArgs.Service.Usn))
                 {
                     return;
                 }
@@ -164,6 +166,25 @@ namespace AVRLibrary
         {
             FalichsLogger.Instance.log(FalichsLogger.Severity.INFO, "Stop scanning for AVR Devices ...");
             _ssdpClient.Stop(true);
+        }
+
+
+        public bool CennectToDevice(AVRDevice device)
+        {
+            if (device?.Usn == null)
+            {
+                return false;
+            }
+            bool success = _avrServices.TryGetValue(device.Usn, out _connectedAvrDevice);
+            if (success)
+            {
+                FalichsLogger.Instance.log(FalichsLogger.Severity.INFO, "Connected to " + device?.AvrDeviceDescribtion?.FriendlyName);
+            }
+            else
+            {
+                FalichsLogger.Instance.log(FalichsLogger.Severity.WARNING, "Failed to connected to " + device?.AvrDeviceDescribtion?.FriendlyName);
+            }
+            return success;
         }
 
 
