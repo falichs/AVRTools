@@ -24,6 +24,7 @@ namespace AVRLibrary
         public static readonly string XML_SERIALNUMBER_STR = "serialNumber";
         public static readonly string XML_UDN_STR = "UDN";
         public static readonly string XML_UPC_STR = "UPC";
+        public static readonly string XML_PRESENTATION_URL_STR = "presentationURL";
 
         private readonly string _friendlyName;
 
@@ -115,6 +116,14 @@ namespace AVRLibrary
         }
 
 
+        private readonly string _presentationURL;
+
+
+        public string PresentationUrl
+        {
+            get { return _presentationURL;}
+        }
+
         private AVRDeviceDescribtion(string friendlyName, 
             string manufacturer, 
             string manufacturerUrl, 
@@ -124,7 +133,8 @@ namespace AVRLibrary
             string modelUrl, 
             string serialNumber, 
             string udn, 
-            string upc)
+            string upc,
+            string presentationURL)
         {
             _friendlyName = friendlyName;
             _manufacturer = manufacturer;
@@ -136,6 +146,7 @@ namespace AVRLibrary
             _serialNumber = serialNumber;
             _udn = udn;
             _upc = upc;
+            _presentationURL = presentationURL;
         }
 
 
@@ -151,6 +162,7 @@ namespace AVRLibrary
             _serialNumber = other.SerialNumber;
             _udn = other.Udn;
             _upc = other.Upc;
+            _presentationURL = PresentationUrl;
         }
 
         public static AVRDeviceDescribtion ReadFromXDocument(XDocument document)
@@ -169,6 +181,7 @@ namespace AVRLibrary
             string serialNumber = deviceElement?.Element(ns + AVRDeviceDescribtion.XML_SERIALNUMBER_STR)?.Value;
             string udn = deviceElement?.Element(ns + AVRDeviceDescribtion.XML_UDN_STR)?.Value;
             string upc = deviceElement?.Element(ns + AVRDeviceDescribtion.XML_UPC_STR)?.Value;
+            string presentationURL = deviceElement?.Element(ns + AVRDeviceDescribtion.XML_PRESENTATION_URL_STR)?.Value;
 
             if (friendlyName == null || 
                 manufacturer == null || 
@@ -179,7 +192,8 @@ namespace AVRLibrary
                 modelUrl == null || 
                 serialNumber == null || 
                 udn == null || 
-                upc == null)
+                upc == null ||
+                presentationURL == null)
             {
                 return null;
             }
@@ -192,7 +206,8 @@ namespace AVRLibrary
                 modelUrl, 
                 serialNumber, 
                 udn, 
-                upc);
+                upc,
+                presentationURL.Trim());
         }
 
 

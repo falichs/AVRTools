@@ -13,8 +13,7 @@
         <DataTemplate x:Key="AVRDeviceDescribtionTemplate">
             <StackPanel>
                 <TextBlock Text="{Binding Path=AvrDeviceDescribtion.FriendlyName}" />
-                <TextBlock Text="{Binding Path=AvrDeviceDescribtion.SerialNumber}"/>
-                <TextBlock Text="{Binding Path=AvrDeviceDescribtion.ModelUrl}"/>
+                <TextBlock Text="{Binding Path=AvrDeviceDescribtion.PresentationUrl}"/>
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
@@ -24,10 +23,61 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="22px"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Button Grid.Column="1" Grid.Row="0" x:Name="buttonConnectDisconnect" Content="Scan" VerticalAlignment="Top" Width="75" HorizontalAlignment="Left" Command="{Binding ScanAction}"/>
-        <ComboBox Grid.Column="0" Grid.Row="0" x:Name="comboBoxDeviceSelect" VerticalAlignment="Top" ItemsSource="{Binding Devices}" ItemTemplate="{StaticResource AVRDeviceDescribtionTemplate}" SelectedItem="{Binding SelectedDevice}"/>
+        <ComboBox Grid.Column="0" Grid.Row="0" 
+                  x:Name="comboBoxDeviceSelect" VerticalAlignment="Top" 
+                  ItemsSource="{Binding Devices}" 
+                  ItemTemplate="{StaticResource AVRDeviceDescribtionTemplate}" 
+                  SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Column="0" Grid.Row="1" 
+                x:Name="buttonPower" 
+                VerticalAlignment="Top" Width="75" 
+                HorizontalAlignment="Left" Height="20"
+                Content="{Binding SelectedDevice.DeviceData.PowerStatus}" 
+                Command="{Binding PowerCommand}"/>
+        <Slider x:Name="sliderVolume"
+                Grid.Column="0" Grid.Row="2"
+                Value="{Binding SelectedDevice.DeviceData.MainZoneStatus.MasterVolume.RelativeVolume}" 
+                Minimum="0"  Maximum="98" 
+                SmallChange="0.5" TickFrequency="0.5" IsSnapToTickEnabled="True" 
+                AutoToolTipPlacement="BottomRight" TickPlacement="Both" />
+
+        <Button x:Name="buttonMute" 
+                Grid.Column="0"
+                Grid.Row="3"
+                VerticalAlignment="Top" Width="75" 
+                HorizontalAlignment="Left" Height="20"
+                Content="{Binding SelectedDevice.DeviceData.MainZoneStatus.MuteStatus}" 
+                Command="{Binding MuteCommand}"/>
+
+        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="POWER" />
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedDevice.DeviceData.MainZoneStatus.Power}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="SOURCE" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedDevice.DeviceData.MainZoneStatus.ActiveInputSource.Name}"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="VOLDISPALY" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedDevice.DeviceData.MainZoneStatus.VolumeDisplay}"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="VOLUME" />
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedDevice.DeviceData.MainZoneStatus.MasterVolume.RelativeVolume}"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="MUTE" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedDevice.DeviceData.MainZoneStatus.MuteStatus}"/>
+        </Grid>
+        
     </Grid>
 </Window>

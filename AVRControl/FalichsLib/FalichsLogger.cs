@@ -44,7 +44,7 @@ namespace FalichsLib
 
         private FalichsLogger()
         {
-            File.WriteAllText(LOG_FILENAME, "LOG");
+            File.WriteAllText(LOG_FILENAME, "LOG\n");
         }
 
         public void log(Severity severity, string msg)

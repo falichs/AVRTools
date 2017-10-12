@@ -40,10 +40,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AVRCommandMainZonePower.cs" />
+    <Compile Include="DeviceData\AVRInputSource.cs" />
+    <Compile Include="DeviceData\AVRMuteStatus.cs" />
+    <Compile Include="DeviceData\AVRDevicePowerStatus.cs" />
+    <Compile Include="DeviceData\AVRSoundMode.cs" />
+    <Compile Include="DeviceData\AVRVolume.cs" />
+    <Compile Include="DeviceData\AVRVolumeDisplay.cs" />
+    <Compile Include="DeviceData\AVRZonePowerStatus.cs" />
+    <Compile Include="DeviceData\AVRZoneStatus.cs" />
+    <Compile Include="Commands\AVRCommandGetAllZoneVolume.cs" />
+    <Compile Include="Commands\AVRCommandGetDeletedSource.cs" />
+    <Compile Include="Commands\AVRCommandGetMuteStatus.cs" />
+    <Compile Include="Commands\AVRCommandGetRenameSource.cs" />
+    <Compile Include="Commands\AVRCommandGetSourceStatus.cs" />
+    <Compile Include="Commands\AVRCommandGetZoneName.cs" />
+    <Compile Include="Commands\AVRCommandMainZoneStatus.cs" />
+    <Compile Include="Commands\AVRCommandMute.cs" />
+    <Compile Include="Commands\AVRCommandDevicePower.cs" />
+    <Compile Include="Commands\AVRCommandVolume.cs" />
     <Compile Include="AVRConnection.cs" />
     <Compile Include="AVRDeviceData.cs" />
     <Compile Include="AVRDeviceDescribtion.cs" />
     <Compile Include="AVRDevice.cs" />
+    <Compile Include="Commands\AVRGETCommand.cs" />
+    <Compile Include="Commands\AVRPOSTCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
