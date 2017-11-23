@@ -1,4 +1,43 @@
-<html><head><title>Document Error: Data follows</title></head>
-		<body><h2>Access Error: Data follows</h2>
-		<p>Form formMainZone_MainZoneXml is not defined</p></body></html>
-
+<?xml version="1.0" encoding="utf-8" ?>
+<item>
+<FriendlyName><value>Denon AVR-X1300W</value></FriendlyName>
+<Power><value>STANDBY</value></Power>
+<ZonePower><value>OFF</value></ZonePower>
+<RCSourceSelect><value>POS</value></RCSourceSelect>
+<RenameZone><value>MAIN ZONE</value></RenameZone>
+<TopMenuLink><value>ON</value></TopMenuLink>
+<VideoSelectDisp><value>OFF</value></VideoSelectDisp>
+<VideoSelect><value></value></VideoSelect>
+<VideoSelectOnOff><value>OFF</value></VideoSelectOnOff>
+<VideoSelectLists>
+<value index='ON' >On</value>
+<value index='OFF' >Off</value>
+<value index='SAT/CBL'>CBL/SAT     </value>
+<value index='DVD'>DVD/Blu-ray </value>
+<value index='BD'>Blu-ray     </value>
+<value index='GAME'>Game        </value>
+<value index='AUX1'>AUX         </value>
+<value index='MPLAY'>Media Player</value>
+</VideoSelectLists>
+<ECOModeDisp><value>ON</value></ECOModeDisp>
+<ECOMode><value>OFF</value></ECOMode>
+<ECOModeLists>
+<value index='ON'  table='ECO : ON' param=''/>
+<value index='OFF'  table='ECO : OFF' param=''/>
+<value index='AUTO'  table='ECO : AUTO' param=''/>
+</ECOModeLists>
+<AddSourceDisplay><value>FALSE</value></AddSourceDisplay>
+<ModelId><value>1</value></ModelId>
+<BrandId><value>DENON_MODEL</value></BrandId>
+<SalesArea><value>4</value></SalesArea>
+<InputFuncSelect><value>Game</value></InputFuncSelect>
+<NetFuncSelect><value>FAVORITES</value></NetFuncSelect>
+<selectSurround><value>Multi Ch In                    </value></selectSurround>
+<VolumeDisplay><value>Absolute</value></VolumeDisplay>
+<MasterVolume><value>-53.0</value></MasterVolume>
+<Mute><value>off</value></Mute>
+<RemoteMaintenance><value></value></RemoteMaintenance>
+<SubwooferDisplay><value>FALSE</value></SubwooferDisplay>
+<Zone2VolDisp><value>TRUE</value></Zone2VolDisp>
+<SleepOff><value>Off</value></SleepOff>
+</item>
